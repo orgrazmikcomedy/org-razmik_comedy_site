@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORG_RAZMIK — Stand-Up Comedy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0c0c0c;
+  --fg: #f0ebe3;
+  --red: #d63c2c;
+  --dim: #2a2a2a;
+  --mid: #777;
+  --paper: #121212;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'DM Mono', monospace;
+  overflow-x: hidden;
+}
+
+*, a { cursor: none; }
+.cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--red);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+  transform: translate(-50%, -50%);
+}
+.cursor.big {
+  width: 38px; height: 38px;
+  background: transparent;
+  border: 1px solid var(--red);
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 56px;
+  background: linear-gradient(to bottom, rgba(12,12,12,0.98) 0%, transparent 100%);
+}
+.nav-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--mid);
+  text-decoration: none;
+}
+.nav-logo em { color: var(--red); font-style: normal; }
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--fg); }
+
+/* HERO */
+.hero {
+  position: relative;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  overflow: hidden;
+}
+
+.hero-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 60px 100px 60px;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-size: 9px;
+  letter-spacing: 5px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: rise 0.6s 0.2s forwards;
+}
+
+.hero-name {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(56px, 8.5vw, 110px);
+  line-height: 0.87;
+  letter-spacing: -3px;
+  opacity: 0;
+  animation: rise 0.7s 0.4s forwards;
+}
+.hero-name .line2 {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fg);
+}
+
+.hero-sub {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--mid);
+  line-height: 1.9;
+  margin-top: 28px;
+  max-width: 360px;
+  opacity: 0;
+  animation: rise 0.6s 0.8s forwards;
+}
+
+.hero-cities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+  opacity: 0;
+  animation: rise 0.6s 1s forwards;
+}
+.city-tag {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--dim);
+  color: var(--mid);
+  transition: border-color 0.2s, color 0.2s;
+}
+.city-tag:hover { border-color: var(--red); color: var(--fg); }
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 48px;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  opacity: 0;
+  animation: rise 0.6s 1.2s forwards;
+}
+.hero-cta::before {
+  content: '';
+  width: 36px; height: 1px;
+  background: var(--red);
+  transition: width 0.3s ease;
+  flex-shrink: 0;
+}
+.hero-cta:hover::before { width: 72px; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-photo {
+  position: relative;
+  overflow: hidden;
+}
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(25%) contrast(1.08);
+  animation: photoReveal 1.3s ease forwards;
+}
+@keyframes photoReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0% 0 0); }
+}
+.hero-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, rgba(214,60,44,0.07) 0%, transparent 55%);
+  z-index: 1;
+}
+.photo-label {
+  position: absolute;
+  right: 14px;
+  bottom: 70px;
+  writing-mode: vertical-rl;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+/* TICKER */
+.ticker-wrap {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 42px;
+  background: var(--red);
+  overflow: hidden;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+.ticker {
+  display: flex;
+  animation: ticker 20s linear infinite;
+  white-space: nowrap;
+}
+.ticker span {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  color: var(--fg);
+  padding: 0 36px;
+}
+.ticker span.sep { color: rgba(255,255,255,0.35); padding: 0 6px; }
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ABOUT */
+.about {
+  padding: 120px 60px;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 100px;
+  border-top: 1px solid var(--dim);
+}
+.about-sticky {
+  position: sticky;
+  top: 120px;
+  align-self: start;
+}
+.section-num {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--red);
+  margin-bottom: 18px;
+}
+.about-sticky h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(34px, 3.5vw, 50px);
+  line-height: 0.93;
+  letter-spacing: -1px;
+}
+.about-sticky h2 .outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--fg);
+}
+.about-content { display: flex; flex-direction: column; gap: 28px; padding-top: 6px; }
+.about-content p {
+  font-size: 13px;
+  line-height: 2;
+  color: #999;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+.about-content p strong { color: var(--fg); font-weight: 400; }
+
+.fact-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--dim);
+  border: 1px solid var(--dim);
+  margin-top: 8px;
+}
+.fact { background: var(--bg); padding: 24px 20px; }
+.fact-n {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--red);
+  line-height: 1;
+}
+.fact-l {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-top: 6px;
+}
+
+/* SHOWS */
+.shows {
+  padding: 80px 60px;
+  border-top: 1px solid var(--dim);
+}
+.shows-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+.shows-head h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 0.93;
+}
+.shows-head .ig-link {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--red);
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--red);
+  padding-bottom: 3px;
+}
+.show-item {
+  display: grid;
+  grid-template-columns: 96px 52px 1fr auto;
+  align-items: center;
+  gap: 32px;
+  padding: 22px 0;
+  border-bottom: 1px solid #191919;
+  transition: padding-left 0.25s, background 0.25s;
+}
+.show-item:hover { padding-left: 14px; background: var(--paper); }
+.show-date {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+.show-flag { font-size: 20px; }
+.show-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 21px;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+.show-place {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--mid);
+  text-transform: uppercase;
+}
+.show-btn {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--dim);
+  padding: 10px 22px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.show-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* CITIES */
+.map-section {
+  padding: 80px 60px;
+  border-top: 1px solid var(--dim);
+  background: var(--paper);
+}
+.map-section h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 0.93;
+  margin-bottom: 56px;
+}
+.cities-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--dim);
+}
+.city-card {
+  background: var(--paper);
+  padding: 36px 24px;
+  transition: background 0.2s;
+}
+.city-card:hover { background: #1c1c1c; }
+.city-flag { font-size: 26px; margin-bottom: 12px; }
+.city-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.city-country {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.city-badge {
+  display: inline-block;
+  font-size: 8px;
+  letter-spacing: 2px;
+  padding: 3px 8px;
+  margin-top: 12px;
+  background: var(--red);
+  color: var(--fg);
+}
+.city-badge.base { background: var(--fg); color: var(--bg); }
+
+/* VIDEO */
+.video-section {
+  padding: 80px 60px;
+  border-top: 1px solid var(--dim);
+}
+.video-section h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 0.93;
+  margin-bottom: 48px;
+}
+.video-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 220px 220px;
+  gap: 10px;
+}
+.video-card {
+  position: relative;
+  background: var(--paper);
+  overflow: hidden;
+}
+.video-card:first-child { grid-row: span 2; }
+.video-inner {
+  width: 100%;
+  height: 100%;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+.video-card:hover .video-inner { background: #191919; }
+.play-btn {
+  width: 56px; height: 56px;
+  border: 1px solid var(--red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red);
+  font-size: 16px;
+  transition: background 0.2s, color 0.2s;
+}
+.video-card:hover .play-btn { background: var(--red); color: var(--fg); }
+.video-meta {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 18px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+}
+.v-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+.v-sub {
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--mid);
+  text-transform: uppercase;
+}
+
+/* CONTACT */
+.contact {
+  padding: 120px 60px;
+  border-top: 1px solid var(--dim);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.contact h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 0.93;
+  letter-spacing: -1px;
+}
+.contact h2 .outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--fg);
+}
+.contact-note {
+  font-size: 12px;
+  color: var(--mid);
+  line-height: 1.9;
+  margin-top: 24px;
+  letter-spacing: 0.5px;
+}
+.contact-links { display: flex; flex-direction: column; }
+.clink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  border-bottom: 1px solid #181818;
+  text-decoration: none;
+  color: var(--fg);
+  transition: padding-left 0.2s, color 0.2s;
+}
+.clink:hover { padding-left: 12px; color: var(--red); }
+.clink-left { display: flex; align-items: center; gap: 18px; }
+.clink-icon { font-size: 18px; }
+.clink-name {
+  font-family: 'Anton', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+.clink-handle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--mid);
+  margin-top: 2px;
+}
+.clink-arrow { font-size: 18px; color: var(--dim); transition: color 0.2s; }
+.clink:hover .clink-arrow { color: var(--red); }
+
+/* FOOTER */
+footer {
+  padding: 26px 60px;
+  border-top: 1px solid var(--dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer p { font-size: 9px; letter-spacing: 2px; color: var(--dim); text-transform: uppercase; }
+.footer-mark {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  color: var(--dim);
+}
+
+/* Grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+/* MOBILE */
+@media (max-width: 800px) {
+  nav { padding: 16px 24px; }
+  .nav-links { gap: 20px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-photo { display: none; }
+  .hero-text { padding: 0 24px 100px; }
+  .about { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
+  .about-sticky { position: static; }
+  .fact-row { grid-template-columns: 1fr 1fr; }
+  .shows, .map-section, .video-section, .contact, footer { padding: 60px 24px; }
+  .cities-grid { grid-template-columns: repeat(2, 1fr); }
+  .video-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .video-card:first-child { grid-row: auto; }
+  .video-card { height: 180px; }
+  .contact { grid-template-columns: 1fr; }
+  .show-item { grid-template-columns: 80px 1fr; }
+  .show-btn, .show-flag { display: none; }
+  .shows-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav>
+  <a href="#" class="nav-logo"><em>ORG_</em>RAZMIK</a>
+  <ul class="nav-links">
+    <li><a href="#shows">Shows</a></li>
+    <li><a href="#cities">Cities</a></li>
+    <li><a href="#video">Video</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Stand-up comedy · Warsaw, Poland</p>
+    <h1 class="hero-name">ORG_<br><span class="line2">RAZMIK</span></h1>
+    <p class="hero-sub">
+      English-language stand-up.<br>
+      Performing across Europe —<br>
+      honest, sharp, uncomfortably funny.
+    </p>
+    <div class="hero-cities">
+      <span class="city-tag">🇵🇱 Warsaw</span>
+      <span class="city-tag">🇱🇹 Lithuania</span>
+      <span class="city-tag">🇭🇺 Budapest</span>
+      <span class="city-tag">🇩🇰 Copenhagen</span>
+      <span class="city-tag">🇵🇱 Gdańsk</span>
+      <span class="city-tag">🇵🇱 Szczecin</span>
+    </div>
+    <a href="#shows" class="hero-cta">Upcoming shows</a>
+  </div>
+
+  <div class="hero-photo">
+    <img src="/mnt/user-data/uploads/A5C43166-4D78-4C53-BA8B-CFD3D2B02266_1_105_c.jpeg" alt="ORG_RAZMIK stand-up comedian">
+    <span class="photo-label">@org_razmik_comedy</span>
+  </div>
+
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>STAND-UP COMEDY</span><span class="sep">✦</span>
+      <span>ENGLISH LANGUAGE</span><span class="sep">✦</span>
+      <span>WARSAW</span><span class="sep">✦</span>
+      <span>BUDAPEST</span><span class="sep">✦</span>
+      <span>COPENHAGEN</span><span class="sep">✦</span>
+      <span>GDAŃSK</span><span class="sep">✦</span>
+      <span>SZCZECIN</span><span class="sep">✦</span>
+      <span>LITHUANIA</span><span class="sep">✦</span>
+      <!-- duplicate for seamless loop -->
+      <span>STAND-UP COMEDY</span><span class="sep">✦</span>
+      <span>ENGLISH LANGUAGE</span><span class="sep">✦</span>
+      <span>WARSAW</span><span class="sep">✦</span>
+      <span>BUDAPEST</span><span class="sep">✦</span>
+      <span>COPENHAGEN</span><span class="sep">✦</span>
+      <span>GDAŃSK</span><span class="sep">✦</span>
+      <span>SZCZECIN</span><span class="sep">✦</span>
+      <span>LITHUANIA</span><span class="sep">✦</span>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-sticky">
+    <span class="section-num">// 01</span>
+    <h2>WHO IS<br><span class="outline">RAZMIK</span></h2>
+  </div>
+  <div class="about-content">
+    <p>
+      Stand-up comedian based in <strong>Warsaw, Poland</strong>, performing <strong>entirely in English</strong>.
+      No safety net. No translator needed.
+    </p>
+    <p>
+      From Warsaw stages to Budapest clubs, Copenhagen basements, and the Baltic coast —
+      the material is personal, direct, and lands exactly where it's supposed to.
+    </p>
+    <p>
+      The kind of comedy that makes you laugh first and think second.
+      Or both at once. Either way, you're not leaving indifferent.
+    </p>
+    <div class="fact-row">
+      <div class="fact">
+        <div class="fact-n">6</div>
+        <div class="fact-l">Cities</div>
+      </div>
+      <div class="fact">
+        <div class="fact-n">EN</div>
+        <div class="fact-l">English only</div>
+      </div>
+      <div class="fact">
+        <div class="fact-n">EU</div>
+        <div class="fact-l">All of Europe</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWS -->
+<section class="shows" id="shows">
+  <div class="shows-head">
+    <div>
+      <span class="section-num">// 02</span>
+      <h2>UPCOMING<br>SHOWS</h2>
+    </div>
+    <a href="https://www.instagram.com/org_razmik_comedy/" target="_blank" class="ig-link">All dates on Instagram ↗</a>
+  </div>
+
+  <div class="show-item">
+    <div class="show-date">MAR 15</div>
+    <div class="show-flag">🇵🇱</div>
+    <div class="show-info">
+      <div class="show-title">OPEN MIC NIGHT</div>
+      <div class="show-place">Warsaw · Stand-Up Club</div>
+    </div>
+    <a href="https://www.instagram.com/org_razmik_comedy/" target="_blank" class="show-btn">Get tickets</a>
+  </div>
+  <div class="show-item">
+    <div class="show-date">APR 03</div>
+    <div class="show-flag">🇵🇱</div>
+    <div class="show-info">
+      <div class="show-title">SOLO SET — GDAŃSK</div>
+      <div class="show-place">Gdańsk · TBA</div>
+    </div>
+    <a href="https://www.instagram.com/org_razmik_comedy/" target="_blank" class="show-btn">Get tickets</a>
+  </div>
+  <div class="show-item">
+    <div class="show-date">APR 20</div>
+    <div class="show-flag">🇵🇱</div>
+    <div class="show-info">
+      <div class="show-title">ENGLISH COMEDY NIGHT</div>
+      <div class="show-place">Szczecin · Klub Komedii</div>
+    </div>
+    <a href="https://www.instagram.com/org_razmik_comedy/" target="_blank" class="show-btn">Get tickets</a>
+  </div>
+  <div class="show-item">
+    <div class="show-date">MAY 10</div>
+    <div class="show-flag">🇩🇰</div>
+    <div class="show-info">
+      <div class="show-title">BACK TO COPENHAGEN</div>
+      <div class="show-place">Copenhagen · TBA</div>
+    </div>
+    <a href="https://www.instagram.com/org_razmik_comedy/" target="_blank" class="show-btn">TBA</a>
+  </div>
+</section>
+
+<!-- CITIES -->
+<section class="map-section" id="cities">
+  <span class="section-num">// 03</span>
+  <h2>WHERE I'VE<br>PERFORMED</h2>
+  <div class="cities-grid">
+    <div class="city-card">
+      <div class="city-flag">🇵🇱</div>
+      <div class="city-name">Warsaw</div>
+      <div class="city-country">Poland</div>
+      <span class="city-badge base">HOME BASE</span>
+    </div>
+    <div class="city-card">
+      <div class="city-flag">🇱🇹</div>
+      <div class="city-name">Lithuania</div>
+      <div class="city-country">Baltic States</div>
+      <span class="city-badge">PERFORMED</span>
+    </div>
+    <div class="city-card">
+      <div class="city-flag">🇭🇺</div>
+      <div class="city-name">Budapest</div>
+      <div class="city-country">Hungary</div>
+      <span class="city-badge">PERFORMED</span>
+    </div>
+    <div class="city-card">
+      <div class="city-flag">🇩🇰</div>
+      <div class="city-name">Copenhagen</div>
+      <div class="city-country">Denmark</div>
+      <span class="city-badge">PERFORMED</span>
+    </div>
+    <div class="city-card">
+      <div class="city-flag">🇵🇱</div>
+      <div class="city-name">Gdańsk &amp; Szczecin</div>
+      <div class="city-country">Poland</div>
+      <span class="city-badge">PERFORMED</span>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section" id="video">
+  <span class="section-num">// 04</span>
+  <h2>WATCH</h2>
+  <div class="video-grid">
+    <div class="video-card" onclick="window.open('https://www.instagram.com/org_razmik_comedy/','_blank')">
+      <div class="video-inner"><div class="play-btn">▶</div></div>
+      <div class="video-meta">
+        <div class="v-title">LATEST SET — WARSAW</div>
+        <div class="v-sub">Full performance · 2025</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="window.open('https://www.instagram.com/org_razmik_comedy/','_blank')">
+      <div class="video-inner"><div class="play-btn">▶</div></div>
+      <div class="video-meta">
+        <div class="v-title">BUDAPEST CLIP</div>
+        <div class="v-sub">Reel · Instagram</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="window.open('https://www.instagram.com/org_razmik_comedy/','_blank')">
+      <div class="video-inner"><div class="play-btn">▶</div></div>
+      <div class="video-meta">
+        <div class="v-title">OPEN MIC HIGHLIGHT</div>
+        <div class="v-sub">Reel · Instagram</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div>
+    <span class="section-num">// 05</span>
+    <h2>GET IN<br><span class="outline">TOUCH</span></h2>
+    <p class="contact-note">
+      For bookings, collaborations,<br>
+      or if you just want to talk comedy —<br>
+      find me here.
+    </p>
+  </div>
+  <div class="contact-links">
+    <a href="https://www.instagram.com/org_razmik_comedy/" target="_blank" class="clink">
+      <div class="clink-left">
+        <span class="clink-icon">📸</span>
+        <div>
+          <div class="clink-name">INSTAGRAM</div>
+          <div class="clink-handle">@org_razmik_comedy</div>
+        </div>
+      </div>
+      <span class="clink-arrow">↗</span>
+    </a>
+    <a href="mailto:booking@org-razmik.com" class="clink">
+      <div class="clink-left">
+        <span class="clink-icon">✉️</span>
+        <div>
+          <div class="clink-name">EMAIL</div>
+          <div class="clink-handle">booking@org-razmik.com</div>
+        </div>
+      </div>
+      <span class="clink-arrow">↗</span>
+    </a>
+    <a href="https://t.me/org_razmik" target="_blank" class="clink">
+      <div class="clink-left">
+        <span class="clink-icon">✈️</span>
+        <div>
+          <div class="clink-name">TELEGRAM</div>
+          <div class="clink-handle">@org_razmik</div>
+        </div>
+      </div>
+      <span class="clink-arrow">↗</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Org_Razmik Comedy</p>
+  <div class="footer-mark">ORG_RAZMIK</div>
+  <p>Warsaw · Europe</p>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, .show-item, .city-card, .video-card, .city-tag').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.about, .shows, .map-section, .video-section, .contact').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(28px)';
+    el.style.transition = 'opacity 0.75s ease, transform 0.75s ease';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
